@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentRequest;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
 
@@ -48,5 +49,15 @@ class BlogController extends ControllerBase
         $this->authorize('delete', $post);
         $post->delete();
         return redirect()->route('posts.index')->with('success', 'Post eliminado correctamente.');
+    }
+
+    public function addComment(CommentRequest $request, Post $post)
+    {
+        $post->comments()->create([
+            'content' => $request->validated('content'),
+            'user_id' => $request->user()->id,
+        ]);
+
+        return redirect()->route('posts.show', $post)->with('success', 'Comentario añadido correctamente.');
     }
 }
