@@ -15,6 +15,9 @@ class PostView extends JsonResource
             'content' => $this->content,
             'author' => $this->user?->name,
             'comments_count' => $this->comments_count ?? $this->comments()->count(),
+            'comments' => ReplyView::collection($this->whenLoaded('comments')),
+            'created_at' => $this->created_at?->toISOString(),
+            'updated_at' => $this->updated_at?->toISOString(),
         ];
     }
 }
