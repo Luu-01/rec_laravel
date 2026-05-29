@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ControllerBase;
 use App\Http\Requests\CommentRequest;
 use App\Http\Requests\PostRequest;
+use App\Http\Resources\PostCollection;
 use App\Http\Resources\PostView;
 use App\Http\Resources\ReplyView;
 use App\Models\Post;
@@ -15,7 +16,7 @@ class ApiBlogController extends ControllerBase
     public function index()
     {
         $posts = Post::query()->with('user')->withCount('comments')->latest()->paginate(10);
-        return PostView::collection($posts);
+        return new PostCollection($posts);
     }
 
     public function show(Post $post)
